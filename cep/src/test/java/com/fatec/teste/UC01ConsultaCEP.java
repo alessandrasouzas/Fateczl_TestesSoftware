@@ -92,6 +92,24 @@ public class UC01ConsultaCEP {
 		assertThat(driver.switchTo().alert().getText(), is("Informe o logradouro !"));
 		
 	}
+	@Test
+	public void CT04ConsultaComCaractereEspecial() {
+		driver.get("http://www.buscacep.correios.com.br/sistemas/buscacep/buscaCep.cfm");
+		{
+			WebElement dropdown = driver.findElement(By.name("UF"));
+			dropdown.findElement(By.xpath("//option[. = 'SP']")).click();
+		}
+		driver.findElement(By.name("Localidade")).sendKeys("São Paulo");
+		{
+			WebElement dropdown = driver.findElement(By.name("Tipo"));
+			dropdown.findElement(By.xpath("//option[. = 'Rua']")).click();
+		}
+		driver.findElement(By.name("Tipo")).click();
+		driver.findElement(By.name("Logradouro")).sendKeys("%");
+		driver.findElement(By.cssSelector(".btn2")).click();
+		espera();
+		assertThat(driver.findElement(By.cssSelector("p")).getText(), is("LOGRADOURO NAO INFORMADO/INVALIDO"));
+	}
 	
 	
 	public void espera() {
